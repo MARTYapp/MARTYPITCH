@@ -3,136 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MARTY – VC Pitch Site</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <title>MARTY – The Quiet Companion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --midnight: #1a2634;
+      --smoky: #4a5c6a;
+      --ink: #2f3f50;
+      --cloud: #f6f7f5;
+      --mist: #b0c6d9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #1a2634, #2f3f50);
-      color: #f6f7f5;
+      background: var(--midnight);
+      color: var(--cloud);
       padding: 2rem;
-      line-height: 1.6;
     }
-    h1, h2, h3 { font-family: 'Playfair Display', serif; margin-bottom: 0.5em; }
-    .slide {
-      background: #1d1f21;
-      padding: 2rem;
-      margin: 2rem auto;
+    h1, h2 { font-family: 'Playfair Display', serif; margin-bottom: 0.5em; }
+    .section {
       max-width: 900px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      margin: 3rem auto;
+      padding: 2rem;
+      background: var(--ink);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.3);
     }
-    .subtitle { font-size: 1.2rem; color: #B0C6D9; font-style: italic; }
-    .demo-box {
-      background: #2a3540;
-      border: 1px solid #4a5c6a;
+    .demo {
+      background: var(--smoky);
+      border-radius: 12px;
       padding: 1rem;
       margin-top: 1rem;
-      border-radius: 12px;
     }
     textarea {
       width: 100%;
-      height: 100px;
-      background: #1a2634;
-      border: none;
-      color: #f6f7f5;
-      font-family: 'Inter';
       padding: 1rem;
       font-size: 1rem;
+      border: none;
       border-radius: 8px;
-      resize: vertical;
+      background: var(--midnight);
+      color: var(--cloud);
+      margin-bottom: 1rem;
     }
     button {
-      margin-top: 1rem;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
-      border-radius: 8px;
-      background: #4a5c6a;
+      background: var(--mist);
+      color: var(--ink);
       border: none;
-      color: white;
+      border-radius: 8px;
       cursor: pointer;
     }
-    #response { margin-top: 1rem; font-style: italic; color: #b0c6d9; }
-    .wireframe {
-      background: #10161d;
-      border: 1px solid #4a5c6a;
-      margin-top: 2rem;
-      border-radius: 12px;
-      overflow: hidden;
+    .response {
+      margin-top: 1rem;
+      font-style: italic;
+      color: var(--cloud);
     }
-    .wireframe img {
-      display: block;
-      width: 100%;
+    .card-grid {
+      display: grid;
+      gap: 2rem;
     }
+    .tagline { font-size: 1.25rem; color: var(--mist); margin-top: 0.5rem; font-style: italic; }
+    .img-preview { width: 100%; border-radius: 12px; border: 1px solid var(--smoky); margin-top: 1rem; }
   </style>
 </head>
 <body>
 
-  <div class="slide">
-    <h1>Vision</h1>
-    <p>MARTY is the voice-first AI mental wellness app designed for quiet guys, neurodivergent users, and creative minds. It's not therapy — it's a steady companion when the world isn’t.</p>
-    <p class="subtitle">“Steady when the world isn’t.”</p>
+  <div class="section">
+    <h1>MARTY</h1>
+    <p class="tagline">Steady when the world isn’t.</p>
+    <p>MARTY is the voice-first emotional AI companion for quiet men, neurodivergent folks, and emotionally intelligent creatives.</p>
   </div>
 
-  <div class="slide">
-    <h2>Problem</h2>
-    <p>Most mental health tools are cold, clinical, or cartoonish. Quiet men, creatives, and neurodivergent users feel left behind — or never show up at all.</p>
-  </div>
-
-  <div class="slide">
-    <h2>Solution</h2>
-    <p>MARTY offers a calming voice-based journaling interface and emotional AI responses grounded in DBT. It's radically simple, emotionally intelligent, and never performative.</p>
-  </div>
-
-  <div class="slide">
-    <h2>Interactive Demo</h2>
-    <p>Experience a first glimpse of how MARTY responds to user input.</p>
-    <div class="demo-box">
+  <div class="section">
+    <h2>Real-Time Demo</h2>
+    <p>Try talking to MARTY. He's not here to fix you. Just to listen.</p>
+    <div class="demo">
       <textarea id="userInput" placeholder="What's on your mind?"></textarea>
-      <button onclick="generateResponse()">Talk to MARTY</button>
-      <div id="response"></div>
+      <button onclick="simulateMarty()">Talk to MARTY</button>
+      <div id="response" class="response"></div>
     </div>
   </div>
 
-  <div class="slide">
+  <div class="section card-grid">
+    <div>
+      <h2>Vision</h2>
+      <p>MARTY helps people feel seen — without clinical language or cartoon apps. Built to feel like a friend, not a product.</p>
+    </div>
+    <div>
+      <h2>Problem</h2>
+      <p>Men and creatives are underserved by mental health tech. Most tools feel gamified, stigmatizing, or cold. MARTY offers a new model.</p>
+    </div>
+    <div>
+      <h2>Solution</h2>
+      <p>A minimalist, emotionally fluent voice AI that understands mood, regulates emotion, and responds with real DBT-based care.</p>
+    </div>
+  </div>
+
+  <div class="section">
     <h2>Wireframe Preview</h2>
-    <p>A sneak peek at the MVP experience.</p>
-    <div class="wireframe">
-      <img src="https://i.imgur.com/dLkEVKn.png" alt="MARTY MVP Wireframe" />
-    </div>
+    <img class="img-preview" src="https://i.imgur.com/dLkEVKn.png" alt="MARTY Wireframe" />
+    <p><em>Slide: Daily check-in → Journaling → Feedback Loop → DBT tool suggestion.</em></p>
   </div>
 
-  <div class="slide">
-    <h2>Pricing & Onboarding</h2>
-    <p><strong>Free Tier:</strong> Daily journaling + access to quote-based support.<br>
-    <strong>Premium Tier:</strong> Adaptive AI support, DBT tools, and voice mode ($9/mo).</p>
-    <p><em>Onboarding prompt: “How do you want Marty to show up for you today?”</em></p>
+  <div class="section">
+    <h2>Business Model</h2>
+    <p><strong>Free:</strong> Journaling + quotes + grounding tools<br>
+       <strong>Premium:</strong> Voice input + feedback + planner ($8.99/mo)<br>
+       <strong>Enterprise:</strong> Licensing for HR, education, wellness</p>
   </div>
 
-  <div class="slide">
-    <h2>Licensing & Enterprise Exit Strategy</h2>
-    <p>MARTY is built for partnerships: health systems, school districts, creative orgs. We’re exploring licensing deals, integrations, and white-label enterprise use.</p>
-    <p><em>Exit targets: Notion, Headspace, Apple Health, or employer wellness platforms.</em></p>
+  <div class="section">
+    <h2>Exit Strategy</h2>
+    <p>MARTY is optimized for acquisition or licensing: voice UX, DBT IP, and niche product-market fit. Potential targets: Notion, Headspace, Apple Health, Calm, BetterUp.</p>
   </div>
 
 <script>
-  const replies = [
-    "I'm here. And I'm not judging you.",
-    "Let's unpack that slowly. What's the biggest feeling right now?",
-    "You don’t have to fix it all today. Let’s just name it.",
-    "I’ve got you. Say more if you want."
-  ];
-  function generateResponse() {
-    const response = document.getElementById('response');
-    const input = document.getElementById('userInput').value;
-    if (!input.trim()) {
-      response.innerText = "Go ahead. I’m listening.";
+  function simulateMarty() {
+    const responses = [
+      "Let's just breathe together for a second.",
+      "That's a lot to carry. I'm here.",
+      "Say more. I'm not going anywhere.",
+      "Let’s find the skill that fits this moment.",
+      "You’re not alone in that feeling."
+    ];
+    const input = document.getElementById("userInput").value.trim();
+    const resBox = document.getElementById("response");
+    if (!input) {
+      resBox.innerText = "Start wherever you are."
       return;
     }
-    const rand = Math.floor(Math.random() * replies.length);
-    response.innerText = replies[rand];
+    const rand = Math.floor(Math.random() * responses.length);
+    resBox.innerText = '"' + responses[rand] + '"';
   }
 </script>
 </body>
