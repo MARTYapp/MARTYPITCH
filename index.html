@@ -1,875 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARTY - Pitch Deck</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e8e9ed;
-            overflow-x: hidden;
-        }
-
-        .deck-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .slide {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            border-radius: 20px;
-            padding: 60px 50px;
-            margin: 30px 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #3498db, #2980b9);
-        }
-
-        .slide-number {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 14px;
-            color: #7f8c8d;
-            font-weight: 500;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #ecf0f1;
-        }
-
-        h3 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #3498db;
-        }
-
-        .subtitle {
-            font-size: 1.4rem;
-            color: #bdc3c7;
-            margin-bottom: 40px;
-            font-weight: 400;
-            line-height: 1.4;
-        }
-
-        .tagline {
-            font-size: 1.8rem;
-            color: #3498db;
-            font-style: italic;
-            margin-top: 30px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-        .content-block {
-            background: rgba(52, 152, 219, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            border-left: 4px solid #3498db;
-        }
-
-        .problem-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .problem-list li {
-            margin-bottom: 15px;
-            padding-left: 30px;
-            position: relative;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .problem-list li::before {
-            content: '▸';
-            position: absolute;
-            left: 0;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        .solution-list {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .solution-list li {
-            margin-bottom: 15px;
-            padding-left: 30px;
-            position: relative;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .solution-list li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(52, 152, 219, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #3498db;
-        }
-
-        .feature-card h4 {
-            color: #3498db;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .pricing-tiers {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .tier {
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.1));
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            border: 2px solid rgba(52, 152, 219, 0.3);
-        }
-
-        .tier-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #3498db;
-            margin-bottom: 15px;
-        }
-
-        .tier-price {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ecf0f1;
-            margin-bottom: 20px;
-        }
-
-        .partnership-flow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-
-        .partnership-node {
-            background: rgba(52, 152, 219, 0.2);
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            text-align: center;
-            margin: 10px;
-            border: 3px solid #3498db;
-        }
-
-        .arrow {
-            font-size: 2rem;
-            color: #3498db;
-            margin: 0 10px;
-        }
-
-        .use-case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .use-case {
-            background: rgba(46, 204, 113, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            border-left: 4px solid #2ecc71;
-        }
-
-        .use-case h4 {
-            color: #2ecc71;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .team-member {
-            background: rgba(155, 89, 182, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 4px solid #9b59b6;
-        }
-
-        .ask-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .ask-option {
-            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
-            border-radius: 15px;
-            padding: 30px;
-            border: 2px solid rgba(231, 76, 60, 0.3);
-            text-align: center;
-        }
-
-        .ask-option h4 {
-            color: #e74c3c;
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-
-        .ask-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ecf0f1;
-            margin-bottom: 20px;
-        }
-
-        .navigation {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(52, 152, 219, 0.9);
-            border-radius: 50px;
-            padding: 15px 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-        }
-
-        .nav-dots {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .nav-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
-
-        .nav-arrow {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px 10px;
-            margin: 0 10px;
-            border-radius: 50%;
-            transition: background 0.3s ease;
-        }
-
-        .nav-arrow:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-arrow:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .deck-container {
-                padding: 10px;
-            }
-
-            .slide {
-                padding: 40px 30px;
-                margin: 20px 0;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .ask-options {
-                grid-template-columns: 1fr;
-            }
-
-            .partnership-flow {
-                flex-direction: column;
-            }
-
-            .partnership-node {
-                width: 100px;
-                height: 100px;
-                font-size: 0.9rem;
-            }
-
-            .arrow {
-                transform: rotate(90deg);
-            }
-
-            .navigation {
-                bottom: 20px;
-                padding: 10px 20px;
-            }
-        }
-
-        /* Slide visibility */
-        .slide {
-            display: none;
-        }
-
-        .slide.active {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARTY – VC Pitch Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom, #1a2634, #2f3f50);
+      color: #f6f7f5;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; margin-bottom: 0.5em; }
+    .slide {
+      background: #1d1f21;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 900px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+    .subtitle { font-size: 1.2rem; color: #B0C6D9; font-style: italic; }
+    .demo-box {
+      background: #2a3540;
+      border: 1px solid #4a5c6a;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 12px;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: #1a2634;
+      border: none;
+      color: #f6f7f5;
+      font-family: 'Inter';
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      background: #4a5c6a;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    #response { margin-top: 1rem; font-style: italic; color: #b0c6d9; }
+    .wireframe {
+      background: #10161d;
+      border: 1px solid #4a5c6a;
+      margin-top: 2rem;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .wireframe img {
+      display: block;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <div class="deck-container">
-        <!-- Slide 1: Vision -->
-        <div class="slide active" id="slide-1">
-            <div class="slide-number">01</div>
-            <h1>MARTY</h1>
-            <p class="subtitle">Voice-first emotional intelligence for the quiet minds who need it most</p>
-            
-            <div class="content-grid">
-                <div class="content-block">
-                    <h3>What We Are</h3>
-                    <p>An emotionally intelligent journaling companion that speaks your language—literally. MARTY uses voice-first interaction and DBT-based therapeutic architecture to create a safe space for emotional processing.</p>
-                </div>
-                <div class="content-block">
-                    <h3>Who We Serve</h3>
-                    <p>Neurodivergent creators, quiet guys who don't connect with traditional therapy, and anyone seeking emotional infrastructure that actually understands them.</p>
-                </div>
-            </div>
-            
-            <div class="tagline">"Steady when the world isn't."</div>
-        </div>
 
-        <!-- Slide 2: Problem -->
-        <div class="slide" id="slide-2">
-            <div class="slide-number">02</div>
-            <h2>The Emotional Infrastructure Gap</h2>
-            <p class="subtitle">Millions of people are emotionally underserved by existing mental health solutions</p>
-            
-            <div class="content-grid">
-                <div class="content-block">
-                    <h3>The Therapy Problem</h3>
-                    <ul class="problem-list">
-                        <li>67% of men avoid therapy due to stigma</li>
-                        <li>Neurodivergent users find traditional therapy formats overwhelming</li>
-                        <li>$200+ per session creates access barriers</li>
-                        <li>Waiting lists stretch months</li>
-                    </ul>
-                </div>
-                <div class="content-block">
-                    <h3>The App Problem</h3>
-                    <ul class="problem-list">
-                        <li>Wellness apps are designed for extroverts</li>
-                        <li>Loud interfaces, pushy notifications</li>
-                        <li>One-size-fits-all approaches fail neurodivergent users</li>
-                        <li>No emotional continuity or learning</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(231, 76, 60, 0.1); border-radius: 15px; border-left: 4px solid #e74c3c;">
-                <h3 style="color: #e74c3c;">The Result</h3>
-                <p style="font-size: 1.2rem; line-height: 1.6;">A generation of quiet minds—especially men and neurodivergent individuals—are left without emotional tools that actually fit their needs.</p>
-            </div>
-        </div>
+  <div class="slide">
+    <h1>Vision</h1>
+    <p>MARTY is the voice-first AI mental wellness app designed for quiet guys, neurodivergent users, and creative minds. It's not therapy — it's a steady companion when the world isn’t.</p>
+    <p class="subtitle">“Steady when the world isn’t.”</p>
+  </div>
 
-        <!-- Slide 3: Solution -->
-        <div class="slide" id="slide-3">
-            <div class="slide-number">03</div>
-            <h2>MARTY: Your Emotional Infrastructure</h2>
-            <p class="subtitle">Replika meets Notion, raised by Marsha Linehan and your digital dad</p>
-            
-            <div class="content-grid">
-                <div class="content-block">
-                    <h3>Voice-First Design</h3>
-                    <ul class="solution-list">
-                        <li>Natural conversation, not form-filling</li>
-                        <li>Processes speech patterns for emotional insights</li>
-                        <li>Accessibility-first for neurodivergent users</li>
-                        <li>Works while walking, commuting, or anywhere</li>
-                    </ul>
-                </div>
-                <div class="content-block">
-                    <h3>Therapeutic Architecture</h3>
-                    <ul class="solution-list">
-                        <li>DBT-based emotional regulation tools</li>
-                        <li>Learns your patterns over time</li>
-                        <li>Gentle prompting, never pushy</li>
-                        <li>Masculine minimalism in design</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(52, 152, 219, 0.1); border-radius: 15px; text-align: center;">
-                <h3 style="color: #3498db; margin-bottom: 20px;">Core Philosophy</h3>
-                <p style="font-size: 1.3rem; line-height: 1.6; font-style: italic;">"Emotional support that feels like a conversation with someone who actually gets you—not a clinical intervention."</p>
-            </div>
-        </div>
+  <div class="slide">
+    <h2>Problem</h2>
+    <p>Most mental health tools are cold, clinical, or cartoonish. Quiet men, creatives, and neurodivergent users feel left behind — or never show up at all.</p>
+  </div>
 
-        <!-- Slide 4: Product Demo -->
-        <div class="slide" id="slide-4">
-            <div class="slide-number">04</div>
-            <h2>Current MVP Features</h2>
-            <p class="subtitle">Live and functional—ready for user testing and pilot programs</p>
-            
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h4>Voice Journaling</h4>
-                    <p>Natural speech-to-text processing with emotional tone analysis. Users can journal while walking, driving, or anywhere.</p>
-                </div>
-                <div class="feature-card">
-                    <h4>Mood Tracking</h4>
-                    <p>Gentle check-ins that learn your patterns. No overwhelming questionnaires—just simple, consistent emotional temperature taking.</p>
-                </div>
-                <div class="feature-card">
-                    <h4>DBT Prompts</h4>
-                    <p>Dialectical Behavior Therapy techniques delivered conversationally. Skills for emotional regulation when you need them most.</p>
-                </div>
-                <div class="feature-card">
-                    <h4>Intelligent Check-ins</h4>
-                    <p>MARTY learns when you typically need support and offers gentle prompts. Never intrusive, always available.</p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(46, 204, 113, 0.1); border-radius: 15px; border-left: 4px solid #2ecc71; text-align: center;">
-                <h3 style="color: #2ecc71; margin-bottom: 15px;">Try It Now</h3>
-                <p style="font-size: 1.1rem;">Demo available at: <strong>https://claude.ai/public/artifacts/91ddc848-738f-4b2e-a128-54f1265781ca</strong></p>
-            </div>
-        </div>
+  <div class="slide">
+    <h2>Solution</h2>
+    <p>MARTY offers a calming voice-based journaling interface and emotional AI responses grounded in DBT. It's radically simple, emotionally intelligent, and never performative.</p>
+  </div>
 
-        <!-- Slide 5: Business Model -->
-        <div class="slide" id="slide-5">
-            <div class="slide-number">05</div>
-            <h2>Revenue Model</h2>
-            <p class="subtitle">Freemium foundation with enterprise scale potential</p>
-            
-            <div class="pricing-tiers">
-                <div class="tier">
-                    <div class="tier-name">Free</div>
-                    <div class="tier-price">$0</div>
-                    <ul style="text-align: left; list-style: none;">
-                        <li>✓ Basic voice journaling</li>
-                        <li>✓ Simple mood tracking</li>
-                        <li>✓ Core AI interactions</li>
-                        <li>✓ Basic DBT prompts</li>
-                    </ul>
-                </div>
-                <div class="tier">
-                    <div class="tier-name">Premium</div>
-                    <div class="tier-price">$12/mo</div>
-                    <ul style="text-align: left; list-style: none;">
-                        <li>✓ Advanced voice responses</li>
-                        <li>✓ Mood insights & patterns</li>
-                        <li>✓ Complete DBT toolkit</li>
-                        <li>✓ Unlimited journaling</li>
-                        <li>✓ Export & backup</li>
-                    </ul>
-                </div>
-                <div class="tier">
-                    <div class="tier-name">Enterprise</div>
-                    <div class="tier-price">Custom</div>
-                    <ul style="text-align: left; list-style: none;">
-                        <li>✓ White-label deployment</li>
-                        <li>✓ HIPAA/FERPA compliance</li>
-                        <li>✓ Custom integrations</li>
-                        <li>✓ Analytics dashboard</li>
-                        <li>✓ Multi-tenant support</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(155, 89, 182, 0.1); border-radius: 15px; text-align: center;">
-                <h3 style="color: #9b59b6; margin-bottom: 15px;">Revenue Projections</h3>
-                <p><strong>Year 1:</strong> $50K ARR | <strong>Year 2:</strong> $500K ARR | <strong>Year 3:</strong> $2M ARR</p>
-                <p style="margin-top: 10px; font-size: 0.9rem; color: #bdc3c7;">Based on 10K free users, 8% conversion to premium, 5 enterprise clients by Y3</p>
-            </div>
-        </div>
-
-        <!-- Slide 6: Partnership Flywheel -->
-        <div class="slide" id="slide-6">
-            <div class="slide-number">06</div>
-            <h2>Trust-Based Growth Model</h2>
-            <p class="subtitle">Each partnership segment feeds the next—no CAC arms race</p>
-            
-            <div class="partnership-flow">
-                <div class="partnership-node">Schools</div>
-                <div class="arrow">→</div>
-                <div class="partnership-node">Nonprofits</div>
-                <div class="arrow">→</div>
-                <div class="partnership-node">HR Platforms</div>
-                <div class="arrow">→</div>
-                <div class="partnership-node">Creators</div>
-            </div>
-            
-            <div class="content-grid" style="margin-top: 50px;">
-                <div class="content-block">
-                    <h3>Partnership Benefits</h3>
-                    <ul class="solution-list">
-                        <li>Credibility transfer between sectors</li>
-                        <li>Shared user bases and testimonials</li>
-                        <li>Reduced acquisition costs</li>
-                        <li>Built-in distribution channels</li>
-                    </ul>
-                </div>
-                <div class="content-block">
-                    <h3>Network Effects</h3>
-                    <ul class="solution-list">
-                        <li>Schools validate safety for families</li>
-                        <li>Nonprofits provide social proof</li>
-                        <li>HR platforms enable B2B scale</li>
-                        <li>Creators drive individual adoption</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(52, 152, 219, 0.1); border-radius: 15px; text-align: center;">
-                <h3 style="color: #3498db; margin-bottom: 15px;">Growth Strategy</h3>
-                <p style="font-size: 1.1rem; line-height: 1.6;">Trust-based partnerships create organic growth loops. Each sector validates MARTY for the next, building credibility and reducing customer acquisition costs.</p>
-            </div>
-        </div>
-
-        <!-- Slide 7: Enterprise Use Cases -->
-        <div class="slide" id="slide-7">
-            <div class="slide-number">07</div>
-            <h2>Enterprise Applications</h2>
-            <p class="subtitle">White-label MARTY across institutions and organizations</p>
-            
-            <div class="use-case-grid">
-                <div class="use-case">
-                    <h4>Education</h4>
-                    <p>FERPA-compliant journaling for neurodivergent students. Helps schools provide emotional support without clinical staff.</p>
-                </div>
-                <div class="use-case">
-                    <h4>Healthcare</h4>
-                    <p>Emotional check-ins between appointments. Potential CPT code alignment for journaling as therapeutic compliance.</p>
-                </div>
-                <div class="use-case">
-                    <h4>Corporate</h4>
-                    <p>Therapy-alternative for male/ND employees. Reduces burnout and improves retention without stigma.</p>
-                </div>
-                <div class="use-case">
-                    <h4>Nonprofits</h4>
-                    <p>Trauma-safe deployment in shelters, reentry programs, and veteran services. Culturally appropriate emotional support.</p>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(46, 204, 113, 0.1); border-radius: 15px;">
-                <h3 style="color: #2ecc71; margin-bottom: 20px;">Enterprise Value Proposition</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div>
-                        <h4 style="color: #2ecc71; margin-bottom: 10px;">Cost Savings</h4>
-                        <p>$50-200K annually in reduced therapy/counseling costs</p>
-                    </div>
-                    <div>
-                        <h4 style="color: #2ecc71; margin-bottom: 10px;">Compliance</h4>
-                        <p>HIPAA, FERPA, and SOC2 ready for institutional deployment</p>
-                    </div>
-                    <div>
-                        <h4 style="color: #2ecc71; margin-bottom: 10px;">Integration</h4>
-                        <p>API-first design for existing HR, EHR, and LMS systems</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 8: Go-To-Market -->
-        <div class="slide" id="slide-8">
-            <div class="slide-number">08</div>
-            <h2>Go-To-Market Strategy</h2>
-            <p class="subtitle">Dual-track approach: direct-to-consumer and institutional partnerships</p>
-            
-            <div class="content-grid">
-                <div class="content-block">
-                    <h3>Phase 1: Foundation (Months 1-12)</h3>
-                    <ul class="solution-list">
-                        <li>Direct-to-user via ND and wellness communities</li>
-                        <li>Creator partnerships (ADHD, anxiety, men's wellness)</li>
-                        <li>Organic growth through word-of-mouth</li>
-                        <li>Build user testimonials and case studies</li>
-                    </ul>
-                </div>
-                <div class="content-block">
-                    <h3>Phase 2: Scale (Months 12-24)</h3>
-                    <ul class="solution-list">
-                        <li>Pilot programs with 3-5 schools/nonprofits</li>
-                        <li>White-label partnerships with health orgs</li>
-                        <li>Enterprise licensing to corporate wellness</li>
-                        <li>API integrations with existing platforms</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px;">
-                <h3 style="color: #3498db; margin-bottom: 20px;">Target Metrics</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px; text-align: center;">
-                        <h4 style="color: #3498db;">10K Users</h4>
-                        <p>By end of Year 1</p>
-                    </div>
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px; text-align: center;">
-                        <h4 style="color: #3498db;">5 Enterprise Clients</h4>
-                        <p>By end of Year 2</p>
-                    </div>
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px; text-align: center;">
-                        <h4 style="color: #3498db">$2M ARR</h4>
-                        <p>By end of Year 3</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 9: Team -->
-        <div class="slide" id="slide-9">
-            <div class="slide-number">09</div>
-            <h2>Team</h2>
-            <p class="subtitle">Founder-led with strategic hiring plan</p>
-            
-            <div class="team-member">
-                <h3 style="color: #9b59b6; margin-bottom: 15px;">Eric Adler - Founder & CEO</h3>
-                <p style="margin-bottom: 15px;">NYC-based creative strategist with deep expertise in neurodivergent user experience and DBT therapeutic frameworks. Systems thinker who identified the gap between traditional therapy and modern emotional needs.</p>
-                <ul style="list-style: none; padding-left: 0;">
-                    <li>✓ 10+ years in digital strategy and user experience</li>
-                    <li>✓ Personal experience with neurodivergent emotional processing</li>
-                    <li>✓ Strong understanding of DBT and therapeutic architecture</li>
-                    <li>✓ Proven track record in building products for underserved communities</li>
-                </ul>
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <h3 style="color: #3498db; margin-bottom: 20px;">Strategic Hiring Plan</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px;">
-                        <h4 style="color: #3498db; margin-bottom: 10px;">Clinical Advisor</h4>
-                        <p>Licensed therapist with DBT expertise to ensure therapeutic integrity</p>
-                    </div>
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px;">
-                        <h4 style="color: #3498db; margin-bottom: 10px;">B2B Growth Lead</h4>
-                        <p>Enterprise sales and partnership development for institutional clients</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 10: The Ask -->
-        <div class="slide" id="slide-10">
-            <div class="slide-number">10</div>
-            <h2>The Ask</h2>
-            <p class="subtitle">Two clear paths to scale MARTY's impact</p>
-            
-            <div class="ask-options">
-                <div class="ask-option">
-                    <h4>Path A: Seed Round</h4>
-                    <div class="ask-amount">$500K - $1.2M</div>
-                    <ul style="text-align: left; list-style: none; padding-left: 0;">
-                        <li>✓ Hire AI engineer and clinical advisor</li>
-                        <li>✓ Expand product features and voice capabilities</li>
-                        <li>✓ Launch pilot programs with 5 institutions</li>
-                        <li>✓ Scale to 10K users by end of Year 1</li>
-                        <li>✓ Establish enterprise partnerships</li>
-                    </ul>
-                </div>
-                <div class="ask-option">
-                    <h4>Path B: Strategic Partnership</h4>
-                    <div class="ask-amount">White-Label</div>
-                    <ul style="text-align: left; list-style: none; padding-left: 0;">
-                        <li>✓ License MARTY to health systems</li>
-                        <li>✓ Partner with major insurers</li>
-                        <li>✓ Integrate with existing HR platforms</li>
-                        <li>✓ Custom deployment for school districts</li>
-                        <li>✓ Revenue sharing model</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div style="margin-top: 40px; padding: 30px; background: rgba(46, 204, 113, 0.1); border-radius: 15px; text-align: center;">
-                <h3 style="color: #2ecc71; margin-bottom: 20px;">Why Now?</h3>
-                <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">Mental health crisis meets AI advancement. Neurodivergent awareness is at an all-time high. Enterprise demand for therapy alternatives is exploding.</p>
-                <p style="font-size: 1.1rem; font-weight: 600; color: #3498db;">MARTY isn't just another app—it's the emotional infrastructure this generation needs.</p>
-            </div>
-            
-            <div style="margin-top: 30px; text-align: center;">
-                <p style="font-size: 1.1rem; color: #bdc3c7;">Ready to execute either path. Let's build the future of emotional support.</p>
-                <div class="tagline" style="margin-top: 20px; font-size: 1.5rem;">"Steady when the world isn't."</div>
-            </div>
-        </div>
+  <div class="slide">
+    <h2>Interactive Demo</h2>
+    <p>Experience a first glimpse of how MARTY responds to user input.</p>
+    <div class="demo-box">
+      <textarea id="userInput" placeholder="What's on your mind?"></textarea>
+      <button onclick="generateResponse()">Talk to MARTY</button>
+      <div id="response"></div>
     </div>
+  </div>
 
-    <!-- Navigation -->
-    <div class="navigation">
-        <button class="nav-arrow" id="prevBtn" onclick="changeSlide(-1)">‹</button>
-        <div class="nav-dots">
-            <div class="nav-dot active" onclick="currentSlide(1)"></div>
-            <div class="nav-dot" onclick="currentSlide(2)"></div>
-            <div class="nav-dot" onclick="currentSlide(3)"></div>
-            <div class="nav-dot" onclick="currentSlide(4)"></div>
-            <div class="nav-dot" onclick="currentSlide(5)"></div>
-            <div class="nav-dot" onclick="currentSlide(6)"></div>
-            <div class="nav-dot" onclick="currentSlide(7)"></div>
-            <div class="nav-dot" onclick="currentSlide(8)"></div>
-            <div class="nav-dot" onclick="currentSlide(9)"></div>
-            <div class="nav-dot" onclick="currentSlide(10)"></div>
-        </div>
-        <button class="nav-arrow" id="nextBtn" onclick="changeSlide(1)">›</button>
+  <div class="slide">
+    <h2>Wireframe Preview</h2>
+    <p>A sneak peek at the MVP experience.</p>
+    <div class="wireframe">
+      <img src="https://i.imgur.com/dLkEVKn.png" alt="MARTY MVP Wireframe" />
     </div>
+  </div>
 
-    <script>
-        let currentSlideIndex = 1;
-        const totalSlides = 10;
+  <div class="slide">
+    <h2>Pricing & Onboarding</h2>
+    <p><strong>Free Tier:</strong> Daily journaling + access to quote-based support.<br>
+    <strong>Premium Tier:</strong> Adaptive AI support, DBT tools, and voice mode ($9/mo).</p>
+    <p><em>Onboarding prompt: “How do you want Marty to show up for you today?”</em></p>
+  </div>
 
-        function showSlide(n) {
-            const slides = document.querySelectorAll('.slide');
-            const dots = document.querySelectorAll('.nav-dot');
-            
-            if (n > totalSlides) currentSlideIndex = 1;
-            if (n < 1) currentSlideIndex = totalSlides;
-            
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            document.getElementById(`slide-${currentSlideIndex}`).classList.add('active');
-            dots[currentSlideIndex - 1].classList.add('active');
-            
-            // Update navigation buttons
-            document.getElementById('prevBtn').disabled = currentSlideIndex === 1;
-            document.getElementById('nextBtn').disabled = currentSlideIndex === totalSlides;
-        }
+  <div class="slide">
+    <h2>Licensing & Enterprise Exit Strategy</h2>
+    <p>MARTY is built for partnerships: health systems, school districts, creative orgs. We’re exploring licensing deals, integrations, and white-label enterprise use.</p>
+    <p><em>Exit targets: Notion, Headspace, Apple Health, or employer wellness platforms.</em></p>
+  </div>
 
-        function changeSlide(n) {
-            currentSlideIndex += n;
-            showSlide(currentSlideIndex);
-        }
-
-        function currentSlide(n) {
-            currentSlideIndex = n;
-            showSlide(currentSlideIndex);
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-            if (e.key === 'ArrowRight') changeSlide(1);
-        });
-
-        // Touch/swipe navigation for mobile
-        let startX = 0;
-        let endX = 0;
-
-        document.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-        });
-
-        document.addEventListener('touchend', function(e) {
-            endX = e.changedTouches[0].clientX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const threshold = 50;
-            const diff = startX - endX;
-            
-            if (Math.abs(diff) > threshold) {
-                if (diff > 0) {
-                    changeSlide(1); // Swipe left, go to next slide
-                } else {
-                    changeSlide(-1); // Swipe right, go to previous slide
-                }
-            }
-        }
-
-        // Initialize
-        showSlide(currentSlideIndex);
-    </script>
+<script>
+  const replies = [
+    "I'm here. And I'm not judging you.",
+    "Let's unpack that slowly. What's the biggest feeling right now?",
+    "You don’t have to fix it all today. Let’s just name it.",
+    "I’ve got you. Say more if you want."
+  ];
+  function generateResponse() {
+    const response = document.getElementById('response');
+    const input = document.getElementById('userInput').value;
+    if (!input.trim()) {
+      response.innerText = "Go ahead. I’m listening.";
+      return;
+    }
+    const rand = Math.floor(Math.random() * replies.length);
+    response.innerText = replies[rand];
+  }
+</script>
 </body>
-</html>color: #3498db; margin-bottom: 10px;">AI Engineer</h4>
-                        <p>Voice processing, emotional analysis, and conversational AI development</p>
-                    </div>
-                    <div style="background: rgba(52, 152, 219, 0.1); padding: 20px; border-radius: 10px;">
-                        <h4 style="
+</html>
