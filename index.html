@@ -1,141 +1,927 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MARTY – The Quiet Companion</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --midnight: #1a2634;
-      --smoky: #4a5c6a;
-      --ink: #2f3f50;
-      --cloud: #f6f7f5;
-      --mist: #b0c6d9;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--midnight);
-      color: var(--cloud);
-      padding: 2rem;
-    }
-    h1, h2 { font-family: 'Playfair Display', serif; margin-bottom: 0.5em; }
-    .section {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: var(--ink);
-      border-radius: 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.3);
-    }
-    .demo {
-      background: var(--smoky);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-    textarea {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: var(--midnight);
-      color: var(--cloud);
-      margin-bottom: 1rem;
-    }
-    button {
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      background: var(--mist);
-      color: var(--ink);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .response {
-      margin-top: 1rem;
-      font-style: italic;
-      color: var(--cloud);
-    }
-    .card-grid {
-      display: grid;
-      gap: 2rem;
-    }
-    .tagline { font-size: 1.25rem; color: var(--mist); margin-top: 0.5rem; font-style: italic; }
-    .img-preview { width: 100%; border-radius: 12px; border: 1px solid var(--smoky); margin-top: 1rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARTY - Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100vw;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .description {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            margin-bottom: 2rem;
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        .competitive-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .competitive-table th,
+        .competitive-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .competitive-table th {
+            background: rgba(102, 126, 234, 0.2);
+            font-weight: 600;
+        }
+
+        .competitive-table .marty-row {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .check { color: #10b981; }
+        .cross { color: #ef4444; }
+
+        .cta-section {
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            margin: 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .slide-1 { background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%); }
+        .slide-2 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        .slide-3 { background: linear-gradient(135deg, #16213e 0%, #0f0f1a 100%); }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1rem;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .problem-list {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .problem-list li {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .problem-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+        }
+
+        .demo-mockup {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-step {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .demo-number {
+            width: 30px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: 600;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-title {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            font-size: 1rem;
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="section">
-    <h1>MARTY</h1>
-    <p class="tagline">Steady when the world isn’t.</p>
-    <p>MARTY is the voice-first emotional AI companion for quiet men, neurodivergent folks, and emotionally intelligent creatives.</p>
-  </div>
-
-  <div class="section">
-    <h2>Real-Time Demo</h2>
-    <p>Try talking to MARTY. He's not here to fix you. Just to listen.</p>
-    <div class="demo">
-      <textarea id="userInput" placeholder="What's on your mind?"></textarea>
-      <button onclick="simulateMarty()">Talk to MARTY</button>
-      <div id="response" class="response"></div>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
     </div>
-  </div>
 
-  <div class="section card-grid">
-    <div>
-      <h2>Vision</h2>
-      <p>MARTY helps people feel seen — without clinical language or cartoon apps. Built to feel like a friend, not a product.</p>
+    <div class="container">
+        <!-- Slide 1: Vision -->
+        <div class="slide active slide-1" id="slide1">
+            <div class="slide-number">01</div>
+            <div class="slide-content">
+                <h1>MARTY</h1>
+                <p class="tagline">"Steady when the world isn't."</p>
+                <p class="description">
+                    The voice-first AI mental wellness app for quiet guys, neurodivergent users, and creatives.<br>
+                    It's not therapy — it's a steady, emotionally intelligent companion when the world isn't.
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Problem -->
+        <div class="slide slide-2" id="slide2">
+            <div class="slide-number">02</div>
+            <div class="slide-content">
+                <h2>The Problem</h2>
+                <p class="description">Most mental health tools are cold, clinical, or cartoonish.<br>They weren't built for the people who don't show up:</p>
+                <ul class="problem-list">
+                    <li>Quiet men</li>
+                    <li>Neurodivergent thinkers</li>
+                    <li>People who hate therapy apps but still want to feel better</li>
+                </ul>
+                <p class="tagline">The wellness space is loud. Our users aren't.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Solution -->
+        <div class="slide slide-3" id="slide3">
+            <div class="slide-number">03</div>
+            <div class="slide-content">
+                <h2>The Solution</h2>
+                <p class="description">MARTY listens first.</p>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Voice-First</h3>
+                        <p>Users speak or type journal entries naturally</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>DBT-Grounded</h3>
+                        <p>Personalized emotional insights based on proven therapy</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Calming Interface</h3>
+                        <p>No avatars. No mood gimmicks. Just real, adaptive support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Product Demo -->
+        <div class="slide" id="slide4">
+            <div class="slide-number">04</div>
+            <div class="slide-content">
+                <h2>Product Demo</h2>
+                <div class="demo-mockup">
+                    <div class="demo-step">
+                        <div class="demo-number">1</div>
+                        <div>Mood Check-in (voice or text)</div>
+                    </div>
+                    <div class="demo-step">
+                        <div class="demo-number">2</div>
+                        <div>Journaling space opens — voice dictation or typing</div>
+                    </div>
+                    <div class="demo-step">
+                        <div class="demo-number">3</div>
+                        <div>MARTY responds with reflective feedback + optional DBT tools</div>
+                    </div>
+                    <div class="demo-step">
+                        <div class="demo-number">4</div>
+                        <div>Access to toolbox: crisis plan, grounding, emotion mapping</div>
+                    </div>
+                    <div class="demo-step">
+                        <div class="demo-number">5</div>
+                        <div>Session saved to private log; revisit anytime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Market Opportunity -->
+        <div class="slide" id="slide5">
+            <div class="slide-number">05</div>
+            <div class="slide-content">
+                <h2>Market Opportunity</h2>
+                <p class="description">We're targeting the silent majority: under-engaged, under-served emotional users.</p>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">100M+</div>
+                        <div class="stat-label">Americans report anxiety, depression, or burnout</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">45M</div>
+                        <div class="stat-label">Men never access therapy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">20%</div>
+                        <div class="stat-label">Gen Z identify as neurodivergent</div>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">$120B+</div>
+                        <div class="stat-label">TAM: Mental wellness market</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$6B</div>
+                        <div class="stat-label">SAM: AI wellness tools + app spend</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$12M</div>
+                        <div class="stat-label">SOM: 150K users × $80 ARR</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Business Model -->
+        <div class="slide" id="slide6">
+            <div class="slide-number">06</div>
+            <div class="slide-content">
+                <h2>Business Model</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Freemium</h3>
+                        <p>Voice journaling + AI reflection (free)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Premium</h3>
+                        <p>Deep DBT tools, emotional memory, routine support</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Enterprise</h3>
+                        <p>Mental health benefit for schools, remote teams, creative orgs</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Insurance</h3>
+                        <p>Reimbursement-ready journaling + companion support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Go-To-Market -->
+        <div class="slide" id="slide7">
+            <div class="slide-number">07</div>
+            <div class="slide-content">
+                <h2>Go-To-Market Strategy</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Creator Launch</h3>
+                        <p>TikTok/IG with neurodivergent and mental health creators</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Community</h3>
+                        <p>Discord & Subreddit communities → quiet, loyal adopters</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Partnerships</h3>
+                        <p>Strategic content with musicians, podcasters, alt wellness voices</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Enterprise</h3>
+                        <p>Pilots with school districts + orgs (focus on silent burnout)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: MOAT -->
+        <div class="slide" id="slide8">
+            <div class="slide-number">08</div>
+            <div class="slide-content">
+                <h2>Our MOAT</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Authentic Voice</h3>
+                        <p>No cartoon mascot, no shallow AI – just Marty. Voice-first.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Emotional Memory</h3>
+                        <p>Custom voice history – AI trains on your tone + emotional patterns</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>DBT Foundation</h3>
+                        <p>Built with DBT – not just affirmations, actual behavior change</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Trust UX</h3>
+                        <p>High trust UX – private, voice-based, no performance layer</p>
+                    </div>
+                </div>
+                <p class="tagline">Can't be copied by Replika or Calm – not avatars, not ambient noise</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Competitive Landscape -->
+        <div class="slide" id="slide9">
+            <div class="slide-number">09</div>
+            <div class="slide-content">
+                <h2>Competitive Landscape</h2>
+                <table class="competitive-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Therapy-Based</th>
+                            <th>Avatar-Free</th>
+                            <th>Voice-First</th>
+                            <th>DBT-Based</th>
+                            <th>UX for Quiet Users</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Headspace</td>
+                            <td class="cross">❌</td>
+                            <td class="check">✅</td>
+                            <td class="cross">❌</td>
+                            <td class="cross">❌</td>
+                            <td class="cross">❌</td>
+                        </tr>
+                        <tr>
+                            <td>Replika</td>
+                            <td class="cross">❌</td>
+                            <td class="cross">❌</td>
+                            <td class="check">✅</td>
+                            <td class="cross">❌</td>
+                            <td class="cross">❌</td>
+                        </tr>
+                        <tr>
+                            <td>Wysa</td>
+                            <td class="check">✅</td>
+                            <td class="check">✅</td>
+                            <td class="cross">❌</td>
+                            <td class="check">✅</td>
+                            <td class="cross">❌</td>
+                        </tr>
+                        <tr class="marty-row">
+                            <td><strong>MARTY</strong></td>
+                            <td class="check">✅</td>
+                            <td class="check">✅</td>
+                            <td class="check">✅</td>
+                            <td class="check">✅</td>
+                            <td class="check">✅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 10: Exit Strategy -->
+        <div class="slide" id="slide10">
+            <div class="slide-number">10</div>
+            <div class="slide-content">
+                <h2>Exit Strategy</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Phase 1 (12–24 mo)</h3>
+                        <p>Build and license MARTY's DBT AI companion to:</p>
+                        <ul style="text-align: left; margin-top: 1rem;">
+                            <li>Employer Assistance Programs</li>
+                            <li>University counseling centers</li>
+                            <li>Telehealth platforms (Lyra, Spring Health)</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Phase 2 (36 mo)</h3>
+                        <p>Target acquisition by:</p>
+                        <ul style="text-align: left; margin-top: 1rem;">
+                            <li>Apple/Siri for emotional UX edge</li>
+                            <li>Calm or Headspace (tech + brand buyout)</li>
+                            <li>Enterprise AI/LLM platforms needing mental health utility layer</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Team -->
+        <div class="slide" id="slide11">
+            <div class="slide-number">11</div>
+            <div class="slide-content">
+                <h2>Team</h2>
+                <div class="team-card">
+                    <div class="team-name">Eric Adler – Founder</div>
+                    <div class="team-title">BA Political Science, City College of NY</div>
+                    <div class="team-bio">
+                        Real estate strategist, product storyteller, DBT-informed creator<br>
+                        Tour guide at MSG — pitched more people than most startups ever reach<br>
+                        Creator of MARTY, House of Commonslut, and multiple digital wellness tools
+                    </div>
+                </div>
+                <p class="description">Advisors in mental health, AI development, and user research</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: The Ask -->
+        <div class="slide" id="slide12">
+            <div class="slide-number">12</div>
+            <div class="slide-content">
+                <h2>The Ask</h2>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">$500K</div>
+                        <div class="stat-label">Pre-seed funding</div>
+                    </div>
+                </div>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>AI Development</h3>
+                        <p>Complete AI model fine-tuning and voice journaling engine</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Beta Launch</h3>
+                        <p>Launch v1 beta in Q4</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Partnerships</h3>
+                        <p>Execute partnerships and license pilots</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Platform</h3>
+                        <p>Build emotional memory layer + offline-first UX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: CTA -->
+        <div class="slide" id="slide13">
+            <div class="slide-number">13</div>
+            <div class="slide-content">
+                <h2>Let's build the quiet revolution in mental wellness.</h2>
+                <div class="cta-section">
+                    <a href="mailto:eric@martyapp.com" class="cta-button">Contact Eric</a>
+                    <a href="#demo" class="cta-button">Request Demo</a>
+                    <a href="#pdf" class="cta-button">Download PDF</a>
+                </div>
+                <p class="tagline">Ready to change how the world thinks about mental wellness?</p>
+            </div>
+        </div>
     </div>
-    <div>
-      <h2>Problem</h2>
-      <p>Men and creatives are underserved by mental health tech. Most tools feel gamified, stigmatizing, or cold. MARTY offers a new model.</p>
+
+    <div class="navigation" id="navigation">
+        <!-- Navigation dots will be generated by JavaScript -->
     </div>
-    <div>
-      <h2>Solution</h2>
-      <p>A minimalist, emotionally fluent voice AI that understands mood, regulates emotion, and responds with real DBT-based care.</p>
-    </div>
-  </div>
 
-  <div class="section">
-    <h2>Wireframe Preview</h2>
-    <img class="img-preview" src="https://i.imgur.com/dLkEVKn.png" alt="MARTY Wireframe" />
-    <p><em>Slide: Daily check-in → Journaling → Feedback Loop → DBT tool suggestion.</em></p>
-  </div>
+    <script>
+        // Initialize variables
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
 
-  <div class="section">
-    <h2>Business Model</h2>
-    <p><strong>Free:</strong> Journaling + quotes + grounding tools<br>
-       <strong>Premium:</strong> Voice input + feedback + planner ($8.99/mo)<br>
-       <strong>Enterprise:</strong> Licensing for HR, education, wellness</p>
-  </div>
+        // Create navigation dots
+        function createNavigation() {
+            const nav = document.getElementById('navigation');
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'nav-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(i));
+                nav.appendChild(dot);
+            }
+        }
 
-  <div class="section">
-    <h2>Exit Strategy</h2>
-    <p>MARTY is optimized for acquisition or licensing: voice UX, DBT IP, and niche product-market fit. Potential targets: Notion, Headspace, Apple Health, Calm, BetterUp.</p>
-  </div>
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
 
-<script>
-  function simulateMarty() {
-    const responses = [
-      "Let's just breathe together for a second.",
-      "That's a lot to carry. I'm here.",
-      "Say more. I'm not going anywhere.",
-      "Let’s find the skill that fits this moment.",
-      "You’re not alone in that feeling."
-    ];
-    const input = document.getElementById("userInput").value.trim();
-    const resBox = document.getElementById("response");
-    if (!input) {
-      resBox.innerText = "Start wherever you are."
-      return;
-    }
-    const rand = Math.floor(Math.random() * responses.length);
-    resBox.innerText = '"' + responses[rand] + '"';
-  }
-</script>
+        // Go to specific slide
+        function goToSlide(slideIndex) {
+            // Remove active class from all slides and dots
+            slides.forEach(slide => slide.classList.remove('active'));
+            document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
+            
+            // Add active class to current slide and dot
+            slides[slideIndex].classList.add('active');
+            document.querySelectorAll('.nav-dot')[slideIndex].classList.add('active');
+            
+            currentSlide = slideIndex;
+            updateProgressBar();
+        }
+
+        // Next slide
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        // Previous slide
+        function prevSlide() {
+            if (currentSlide > 0) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // Mouse wheel navigation
+        let wheelTimeout;
+        document.addEventListener('wheel', (e) => {
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }, 50);
+        });
+
+        // Touch/swipe navigation
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            // Only trigger if horizontal swipe is more significant than vertical
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    prevSlide();
+                } else {
+                    nextSlide();
+                }
+            }
+        });
+
+        // Auto-advance slides (optional - uncomment to enable)
+        // setInterval(() => {
+        //     nextSlide();
+        //     if (currentSlide === totalSlides - 1) {
+        //         setTimeout(() => goToSlide(0), 2000);
+        //     }
+        // }, 8000);
+
+        // Intersection Observer for slide animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createNavigation();
+            updateProgressBar();
+            
+            // Observe all slides for animations
+            slides.forEach(slide => {
+                slideObserver.observe(slide);
+            });
+        });
+
+        // Preload next slide for smoother transitions
+        function preloadSlide(index) {
+            if (slides[index]) {
+                slides[index].style.willChange = 'transform, opacity';
+                setTimeout(() => {
+                    slides[index].style.willChange = 'auto';
+                }, 1000);
+            }
+        }
+
+        // Enhanced click handlers for better UX
+        document.addEventListener('click', (e) => {
+            // Don't navigate on button clicks
+            if (e.target.closest('.cta-button, .nav-dot')) return;
+            
+            // Click on right side = next slide
+            if (e.clientX > window.innerWidth / 2) {
+                nextSlide();
+            } else {
+                // Click on left side = previous slide
+                prevSlide();
+            }
+        });
+
+        // Prevent context menu on right click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Add keyboard shortcut hints
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '?' || e.key === 'h') {
+                alert('Navigation:\n• Arrow keys or Space: Navigate slides\n• Click left/right: Navigate slides\n• Scroll: Navigate slides\n• Touch/swipe: Navigate slides (mobile)');
+            }
+        });
+    </script>
 </body>
 </html>
