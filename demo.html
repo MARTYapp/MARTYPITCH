@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARTY - Live Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .header {
+            padding: 2rem 1.5rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .chat-container {
+            flex: 1;
+            padding: 1rem;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.marty {
+            text-align: left;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            max-width: 85%;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 8px;
+        }
+
+        .message.marty .message-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-area {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+        }
+
+        .prompt {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #667eea;
+        }
+
+        .input-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .voice-btn, .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .voice-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1s infinite;
+            background: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%);
+        }
+
+        .send-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .send-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            border-bottom-left-radius: 8px;
+            max-width: 85%;
+            margin-bottom: 1.5rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .dbt-tool {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .dbt-tool h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .dbt-tool p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .demo-note {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .session-summary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .session-summary h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .mood-slider {
+            width: 100%;
+            margin: 1rem 0;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 8px;
+            outline: none;
+        }
+
+        .mood-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .crisis-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .crisis-content {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .crisis-content h3 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .crisis-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            margin: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .crisis-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .crisis-close {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                border: none;
+            }
+            
+            .input-area {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-note">
+        🔴 LIVE DEMO - Try talking to MARTY
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">MARTY</div>
+            <div class="tagline">Steady when the world isn't</div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message marty">
+                <div class="message-bubble">
+                    Hey, how's your world today?
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="prompt" id="promptText">What's sitting heavy today?</div>
+            <div class="input-controls">
+                <button class="voice-btn" id="voiceBtn">🎤</button>
+                <input type="text" class="input-field" id="messageInput" placeholder="Type or use voice...">
+                <button class="send-btn" id="sendBtn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crisis Support Popup -->
+    <div class="crisis-popup" id="crisisPopup">
+        <div class="crisis-content">
+            <h3>Need help now?</h3>
+            <p>You mentioned feeling overwhelmed. I'm here, and so are people who can help.</p>
+            <button class="crisis-btn">Call 988 (Crisis Line)</button>
+            <button class="crisis-btn">Text "HOME" to 741741</button>
+            <button class="crisis-btn crisis-close" onclick="closeCrisisPopup()">I'm okay, thanks</button>
+        </div>
+    </div>
+
+    <script>
+        // Demo data and responses
+        const prompts = [
+            "Hey, how's your world today?",
+            "What's sitting heavy today?",
+            "Anything you want to leave here?",
+            "What's on your mind right now?",
+            "How are you holding up?"
+        ];
+
+        const martyResponses = {
+            anxiety: [
+                "Sounds like anxiety is sitting heavy with you right now. Want to walk through it together?",
+                "I hear that worried energy. Let's see if we can find some ground under your feet.",
+                "That anxious feeling is real and valid. Want a skill for this moment?"
+            ],
+            depression: [
+                "That heaviness you're carrying - I see it. You don't have to carry it alone.",
+                "Sounds like you're in a tough spot right now. Want to talk through what's weighing on you?",
+                "I hear you. Sometimes the world feels too much. Let's find a way to make it a little lighter."
+            ],
+            stress: [
+                "Sounds like you're carrying a lot of pressure today. Want to walk through it?",
+                "That overwhelmed feeling is real. Let's see what we can do about it.",
+                "I hear the stress in what you're sharing. Want to try something to help with that?"
+            ],
+            anger: [
+                "That anger makes sense given what you're dealing with. Want to talk about it?",
+                "I can feel that frustration. Anger often shows up when something important is threatened.",
+                "That fire in you - it's telling you something. Want to explore what it's about?"
+            ],
+            default: [
+                "Thanks for sharing that with me. I'm here and listening.",
+                "I hear you. Want to dig a little deeper into what's going on?",
+                "That sounds like a lot to process. How are you feeling about all of it?"
+            ]
+        };
+
+        const dbtTools = {
+            anxiety: {
+                name: "TIPP Exercise",
+                description: "Let's try a quick Temperature change. Hold an ice cube or splash cold water on your face. This activates your dive response and can calm anxiety in 30 seconds."
+            },
+            depression: {
+                name: "Opposite Action",
+                description: "When depression says 'stay in bed,' sometimes we gently do the opposite. What's one small thing you could do right now that goes against what depression is telling you?"
+            },
+            stress: {
+                name: "Wise Mind Check-in",
+                description: "Take a breath. What does your emotional mind say about this situation? What does your rational mind say? Now, what feels wise and balanced?"
+            },
+            anger: {
+                name: "STOP Skill",
+                description: "S - Stop what you're doing. T - Take a breath. O - Observe what's happening inside you. P - Proceed with intention. Want to try this together?"
+            }
+        };
+
+        // Crisis keywords
+        const crisisKeywords = ['suicide', 'kill myself', 'end it all', 'can\'t take it', 'want to die', 'hurt myself', 'no point', 'give up'];
+
+        // DOM elements
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const promptText = document.getElementById('promptText');
+        const crisisPopup = document.getElementById('crisisPopup');
+
+        // State
+        let isListening = false;
+        let conversationHistory = [];
+        let sessionCount = 0;
+
+        // Initialize
+        function init() {
+            updatePrompt();
+            setupEventListeners();
+            // Auto-scroll to bottom
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function setupEventListeners() {
+            sendBtn.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            voiceBtn.addEventListener('click', toggleVoice);
+        }
+
+        function updatePrompt() {
+            const randomPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+            promptText.textContent = randomPrompt;
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+
+            // Check for crisis keywords
+            if (checkCrisisKeywords(message)) {
+                showCrisisPopup();
+            }
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Generate MARTY response
+            setTimeout(() => {
+                hideTypingIndicator();
+                generateMartyResponse(message);
+            }, 1500 + Math.random() * 1000);
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.textContent = text;
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(messageDiv);
+            
+            // Auto-scroll to bottom
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+
+            conversationHistory.push({sender, text, timestamp: new Date()});
+        }
+
+        function generateMartyResponse(userMessage) {
+            const emotion = detectEmotion(userMessage);
+            const responses = martyResponses[emotion] || martyResponses.default;
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            
+            addMessage(response, 'marty');
+
+            // Maybe offer a DBT tool
+            if (emotion !== 'default' && Math.random() > 0.4) {
+                setTimeout(() => {
+                    offerDBTTool(emotion);
+                }, 800);
+            }
+
+            // Maybe show session summary after a few exchanges
+            if (conversationHistory.length > 6 && Math.random() > 0.6) {
+                setTimeout(() => {
+                    showSessionSummary();
+                }, 1200);
+            }
+        }
+
+        function detectEmotion(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('anxious') || lower.includes('worried') || lower.includes('nervous') || lower.includes('panic')) {
+                return 'anxiety';
+            }
+            if (lower.includes('sad') || lower.includes('depressed') || lower.includes('hopeless') || lower.includes('empty')) {
+                return 'depression';
+            }
+            if (lower.includes('stressed') || lower.includes('overwhelmed') || lower.includes('pressure') || lower.includes('too much')) {
+                return 'stress';
+            }
+            if (lower.includes('angry') || lower.includes('mad') || lower.includes('frustrated') || lower.includes('pissed')) {
+                return 'anger';
+            }
+            return 'default';
+        }
+
+        function offerDBTTool(emotion) {
+            const tool = dbtTools[emotion];
+            if (!tool) return;
+
+            const toolDiv = document.createElement('div');
+            toolDiv.className = 'message marty';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            const toolContent = document.createElement('div');
+            toolContent.className = 'dbt-tool';
+            toolContent.innerHTML = `
+                <h4>${tool.name}</h4>
+                <p>${tool.description}</p>
+            `;
+            
+            bubbleDiv.appendChild(toolContent);
+            toolDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(toolDiv);
+            
+            // Add quick actions
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'quick-actions';
+            actionsDiv.innerHTML = `
+                <div class="quick-action" onclick="acceptTool()">Let's try it</div>
+                <div class="quick-action" onclick="declineTool()">Maybe later</div>
+            `;
+            bubbleDiv.appendChild(actionsDiv);
+            
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function acceptTool() {
+            addMessage("Yeah, let's try it", 'user');
+            setTimeout(() => {
+                addMessage("Great! I'll guide you through it. Take your time and remember - this is practice, not perfection.", 'marty');
+            }, 800);
+        }
+
+        function declineTool() {
+            addMessage("Maybe later", 'user');
+            setTimeout(() => {
+                addMessage("No worries at all. The tools are here whenever you need them. Want to keep talking about what's on your mind?", 'marty');
+            }, 800);
+        }
+
+        function showSessionSummary() {
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'message marty';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            const summaryContent = document.createElement('div');
+            summaryContent.className = 'session-summary';
+            summaryContent.innerHTML = `
+                <h4>Session Reflection</h4>
+                <p>Today you spoke from a place of authenticity and courage. That's worth honoring.</p>
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="saveSession()">Save this session</div>
+                    <div class="quick-action" onclick="continueChat()">Keep talking</div>
+                </div>
+            `;
+            
+            bubbleDiv.appendChild(summaryContent);
+            summaryDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(summaryDiv);
+            
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function saveSession() {
+            addMessage("Save this session", 'user');
+            setTimeout(() => {
+                addMessage("Session saved. You can revisit these reflections anytime. Take care of yourself.", 'marty');
+            }, 800);
+        }
+
+        function continueChat() {
+            addMessage("Let's keep talking", 'user');
+            setTimeout(() => {
+                addMessage("I'm here for as long as you need. What else is on your mind?", 'marty');
+            }, 800);
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <span>MARTY is thinking...</span>
+            `;
+            chatContainer.appendChild(typingDiv);
+            
+            setTimeout(() => {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function toggleVoice() {
+            if (!isListening) {
+                startListening();
+            } else {
+                stopListening();
+            }
+        }
+
+        function startListening() {
+            isListening = true;
+            voiceBtn.classList.add('listening');
+            voiceBtn.textContent = '⏹️';
+            
+            // Simulate voice input (in real app, this would use Web Speech API)
+            setTimeout(() => {
+                const voiceMessages = [
+                    "I'm feeling really anxious about work tomorrow",
+                    "I can't stop thinking about what happened",
+                    "Everything feels overwhelming right now",
+                    "I'm just tired of pretending I'm okay",
+                    "I don't know how to deal with this anymore"
+                ];
+                const randomMessage = voiceMessages[Math.floor(Math.random() * voiceMessages.length)];
+                messageInput.value = randomMessage;
+                stopListening();
+            }, 2000);
+        }
+
+        function stopListening() {
+            isListening = false;
+            voiceBtn.classList.remove('listening');
+            voiceBtn.textContent = '🎤';
+        }
+
+        function checkCrisisKeywords(message) {
+            const lower = message.toLowerCase();
+            return crisisKeywords.some(keyword => lower.includes(keyword));
+        }
+
+        function showCrisisPopup() {
+            crisisPopup.style.display = 'flex';
+        }
+
+        function closeCrisisPopup() {
+            crisisPopup.style.display = 'none';
+            setTimeout(() => {
+                addMessage("I'm glad you're reaching out. Let's take this one moment at a time. I'm here with you.", 'marty');
+            }, 500);
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
