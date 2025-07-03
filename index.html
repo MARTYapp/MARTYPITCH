@@ -1,98 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MARTY Pitch Deck</title>
-    <style>
-      * {
-        box-sizing: border-box;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MARTY Pitch Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom, #1a2634, #2f3f50);
+      color: #f6f7f5;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      color: #d7e4f2;
+    }
+
+    .slide {
+      margin: 4rem auto;
+      max-width: 800px;
+      background: #1d1f21;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    textarea {
+      width: 100%;
+      font-size: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      border: none;
+      background: #2f3f50;
+      color: #f6f7f5;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background: #4a5c6a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5f7388;
+    }
+
+    #responseOutput {
+      margin-top: 1.5rem;
+      font-style: italic;
+      color: #b0c6d9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide">
+    <h2>Vision</h2>
+    <p>
+      MARTY is the voice-first AI mental wellness app designed for quiet guys, neurodivergent users, and creative minds. It's not therapy — it's a steady companion when the world isn’t.
+    </p>
+    <p><em>“Steady when the world isn’t.”</em></p>
+  </div>
+
+  <div class="slide">
+    <h2>Problem</h2>
+    <p>
+      Most mental health tools are cold, clinical, or cartoonish. Quiet men, creatives, and neurodivergent users feel left behind — or never show up at all.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h2>Solution</h2>
+    <p>
+      MARTY offers a calming voice-based journaling interface and emotional AI responses grounded in DBT. It's radically simple, emotionally intelligent, and never performative.
+    </p>
+  </div>
+
+  <div class="slide">
+    <h2>Try the MARTY MVP</h2>
+    <p>Click below to simulate a DBT journaling moment with MARTY.</p>
+    <textarea id="journalInput" placeholder="Speak your mind here..." rows="5"></textarea>
+    <button onclick="simulateResponse()">Send to MARTY</button>
+    <div id="responseOutput"></div>
+  </div>
+
+  <script>
+    function simulateResponse() {
+      const input = document.getElementById("journalInput").value.trim();
+      const responseBox = document.getElementById("responseOutput");
+      if (!input) {
+        responseBox.innerText = "Let's start with something small. What's on your mind?";
+        return;
       }
 
-      body {
-        margin: 0;
-        font-family: 'Inter', sans-serif;
-        background: linear-gradient(to bottom, #1a2634, #2f3f50);
-        color: #f6f7f5;
-        padding: 2rem;
-        line-height: 1.6;
-      }
+      const prompts = [
+        "That makes total sense. Want to unpack that a bit more together?",
+        "You're doing better than you think. Let's breathe through this.",
+        "Thanks for trusting me with that. Let’s keep going.",
+        "Let's pause. Where in your body are you feeling this right now?",
+        "That’s heavy. Let’s hold it gently together. No rush."
+      ];
 
-      h1, h2 {
-        font-family: 'Playfair Display', serif;
-      }
+      const randomResponse = prompts[Math.floor(Math.random() * prompts.length)];
+      responseBox.innerText = `"${randomResponse}"`;
+    }
+  </script>
 
-      .slide {
-        margin: 4rem auto;
-        max-width: 800px;
-        background: #1d1f21;
-        padding: 2rem;
-        border-radius: 16px;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        transition: all 0.3s ease;
-      }
-
-      .slide:hover {
-        transform: scale(1.01);
-      }
-
-      .slide-title {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: #b0c6d9;
-      }
-
-      .slide-content {
-        font-size: 1.1rem;
-        color: #e0e3e7;
-      }
-
-      .brand-tagline {
-        font-size: 1.2rem;
-        color: #b0c6d9;
-        font-style: italic;
-        margin-top: 0.5rem;
-      }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <div class="slide">
-      <h1 class="slide-title">Vision</h1>
-      <p class="slide-content">
-        MARTY is the voice-first AI mental wellness app designed for quiet guys, neurodivergent users, and creative minds. It's not therapy — it's a steady companion when the world isn’t.
-      </p>
-      <p class="brand-tagline">“Steady when the world isn’t.”</p>
-    </div>
-
-    <div class="slide">
-      <h2 class="slide-title">Problem</h2>
-      <p class="slide-content">
-        Most mental health tools are cold, clinical, or cartoonish. Quiet men, creatives, and neurodivergent users feel left behind — or never show up at all.
-      </p>
-    </div>
-
-    <div class="slide">
-      <h2 class="slide-title">Solution</h2>
-      <p class="slide-content">
-        MARTY offers a calming voice-based journaling interface and emotional AI responses grounded in DBT. It's radically simple, emotionally intelligent, and never performative.
-      </p>
-    </div>
-
-    <div class="slide">
-      <h2 class="slide-title">MVP Demo</h2>
-      <p class="slide-content">
-        Demo available on request. Core features include: mood check-in, voice-to-text journaling, emotionally responsive feedback, and DBT tools.
-      </p>
-    </div>
-
-    <div class="slide">
-      <h2 class="slide-title">Contact</h2>
-      <p class="slide-content">
-        Eric Adler<br />
-        Founder, MARTY<br />
-        martymindapp@gmail.com
-      </p>
-    </div>
-  </body>
+</body>
 </html>
